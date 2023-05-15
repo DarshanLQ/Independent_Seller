@@ -9,7 +9,7 @@ const OwnerTable = () => {
     const [columns, setColumns] = useState()
     const [itemData, setItemData] = useState()
     const parentRef = useRef()
-    const [width, setWidth] = useState()
+    const [currentRow, setCurrentRow] = useState(null);
 
     const itemsToBeRemoved = [
         'LD ID', 'LD ID Url', "Cert Num", "Cert Num Url",
@@ -30,58 +30,6 @@ const OwnerTable = () => {
         "Img4": "Img4 Url"
     }
 
-    //     ```
-    // Algo:
-    //     if(key is in the items to be merged)
-    //         return <a href = row[itemsToBeMerged[key]]>row[key] </a>
-
-    // ```
-
-
-    //     ```
-    // format:
-    //     data:{
-    //         id: string,
-    //         item_attributes: {
-    //             "[key]" : { 
-    //                 "ori": string,
-    //                 "key" : string, --> // value for the column
-    //                 "trans": string  -->  // this the value for the row.
-    //             }
-    //         }
-
-
-    //     }
-
-    // ```
-
-
-    // const generateColumns = (data) => {
-
-    //     const columns = [
-    //         // {
-    //         //     name: "Id",
-    //         //     selector: row => row.id
-    //         // }
-    //     ]
-
-
-
-    //     const itemAttr = data[0].item_attributes;
-    //     for (const [key, value] of Object.entries(itemAttr)) {
-    //         if (value.ori) {
-
-    //             let x = {}
-    //             x["name"] = value.key
-    //             x["selector"] = row => row.item_attributes[key].trans
-
-    //             columns.push(x)
-    //         }
-    //     }
-
-    //     setColumns(columns)
-
-    // }
 
 
 
@@ -186,8 +134,11 @@ const OwnerTable = () => {
                 columns={columns}
                 data={itemData}
                 expandableRows
+                expandableRowExpanded={(row) => (row === currentRow)}
+                expandOnRowClicked
+                onRowClicked={(row) => setCurrentRow(row)}
                 expandableRowsComponent={ExpandedComponent}
-                expandOnRowClicked={true}
+                onRowExpandToggled={(bool, row) => setCurrentRow(row)}
                 pagination
                 paginationRowsPerPageOptions={[20, 50]}
                 paginationPerPage={20}
