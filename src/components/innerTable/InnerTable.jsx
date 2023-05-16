@@ -337,7 +337,7 @@ const InnerTable = ({ parentRef, data }) => {
 
                                     <td colspan={2} style={{ border: "none", textAlign: 'left' }}>{data["Use Rap"]}</td>
                                 </tr>
-                                <tr>
+                                <tr className='remove-pd'>
                                     <td>Rap 1st</td>
                                     <td>Rap 5th</td>
                                     <td>Rap 25th</td>
@@ -346,7 +346,7 @@ const InnerTable = ({ parentRef, data }) => {
 
 
                                 </tr>
-                                <tr style={{ backgroundColor: "gray" }}>
+                                <tr style={{ backgroundColor: "gray" }} className='remove-pd'>
                                     <td>{data["1st Rap %"]}</td>
                                     <td>{data["5th Rap %"]}</td>
                                     <td>{data["25th Rap %"]}</td>

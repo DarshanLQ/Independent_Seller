@@ -101,4 +101,14 @@ tfoot th {
         width: 100%;
         margin-right: 10px;
     }
+
+    .rankingContainer {
+        width: 50%;
+        border: 1px solid black
+    }
+
+}
+
+.remove-pd td {
+    padding: 10px 0px;
 }
