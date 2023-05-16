@@ -152,6 +152,23 @@ const InnerTable = ({ parentRef, data }) => {
         debugTable: true
     })
 
+    const calucateCurrentItems = () => {
+
+        let totalItems = itemData.length
+
+        let currentPage = table.getState().pagination.pageIndex
+        let rowCount = table.getState().pagination.pageSize
+
+        let rangeStart = (currentPage * rowCount) + 1
+        let rangeEnd = rangeStart + rowCount
+
+        if (rangeEnd > totalItems) {
+            rangeEnd = totalItems
+        }
+
+        return `Showing ${rangeStart} - ${rangeEnd} out of ${totalItems} items`
+    }
+
 
 
     return (
@@ -160,70 +177,57 @@ const InnerTable = ({ parentRef, data }) => {
                 <div style={{ textAlign: "start", maxWidth: width, }}>{
 
                 }
-                    <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div style={{ display: "flex", flexDirection: "row" }} className='parentContainer'>
                         {
                             itemData ?
                                 <div className='innerLeft--container'>
-                                    <div style={{ margin: "10px 0px" }}>
-                                        <button
-                                            className="border rounded p-1"
-                                            onClick={() => table.setPageIndex(0)}
-                                            disabled={!table.getCanPreviousPage()}
-                                        >
-                                            {'<<'}
-                                        </button>
-                                        <button
-                                            className="border rounded p-1"
-                                            onClick={() => table.previousPage()}
-                                            disabled={!table.getCanPreviousPage()}
-                                        >
-                                            {'<'}
-                                        </button>
-                                        <button
-                                            className="border rounded p-1"
-                                            onClick={() => table.nextPage()}
-                                            disabled={!table.getCanNextPage()}
-                                        >
-                                            {'>'}
-                                        </button>
-                                        <button
-                                            className="border rounded p-1"
-                                            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                                            disabled={!table.getCanNextPage()}
-                                        >
-                                            {'>>'}
-                                        </button>
-                                        <span style={{ display: "flex", flexDirection: "row" }}>
-                                            <div>Page &nbsp;</div>
-                                            <strong>
-                                                {table.getState().pagination.pageIndex + 1} of{' '}
-                                                {table.getPageCount()}
-                                            </strong>
-                                        </span>
-                                        {/* <span className="flex items-center gap-1">
-                                    | Go to page:
-                                    <input
-                                        type="number"
-                                        defaultValue={table.getState().pagination.pageIndex + 1}
-                                        onChange={e => {
-                                            const page = e.target.value ? Number(e.target.value) - 1 : 0
-                                            table.setPageIndex(page)
-                                        }}
-                                        className="border p-1 rounded w-16"
-                                    />
-                                </span> */}
-                                        {/* <select
-                                    value={table.getState().pagination.pageSize}
-                                    onChange={e => {
-                                        table.setPageSize(Number(e.target.value))
-                                    }}
-                                >
-                                    {[10, 20, 30, 40, 50].map(pageSize => (
-                                        <option key={pageSize} value={pageSize}>
-                                            Show {pageSize}
-                                        </option>
-                                    ))}
-                                </select> */}
+                                    <div className='pagination-controls'>
+                                        <div>
+                                            {
+                                                calucateCurrentItems()
+                                            }
+                                        </div>
+                                        <div style={{ fontWeight: "bold" }}> Matching Items</div>
+
+                                        <div style={{ display: "flex", flexDirection: "row" }}>
+                                            <button
+                                                className="border rounded p-1"
+                                                onClick={() => table.setPageIndex(0)}
+                                                disabled={!table.getCanPreviousPage()}
+                                            >
+                                                {'<<'}
+                                            </button>
+                                            <button
+                                                className="border rounded p-1"
+                                                onClick={() => table.previousPage()}
+                                                disabled={!table.getCanPreviousPage()}
+                                            >
+                                                {'<'}
+                                            </button>
+                                            <span style={{ margin: "0px 5px" }}>
+
+                                                <div>
+                                                    {table.getState().pagination.pageIndex + 1} of{' '}
+                                                    {table.getPageCount()}
+                                                </div>
+                                            </span>
+                                            <button
+                                                className="border rounded p-1"
+                                                onClick={() => table.nextPage()}
+                                                disabled={!table.getCanNextPage()}
+                                            >
+                                                {'>'}
+                                            </button>
+                                            <button
+                                                className="border rounded p-1"
+                                                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                                                disabled={!table.getCanNextPage()}
+                                            >
+                                                {'>>'}
+                                            </button>
+                                        </div>
+
+
                                     </div>
 
 
