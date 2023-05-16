@@ -1,0 +1,52 @@
+table {
+    border: 1px solid lightgray;
+    border-collapse: collapse;
+    border-radius: 8px;
+}
+
+tbody {
+    border-bottom: 1px solid lightgray;
+}
+
+th {
+    border-bottom: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    /* padding: 20px 14px; */
+    min-width: 120px;
+    box-sizing: border-box;
+
+
+}
+
+td {
+    border: 1px solid #dbdbdb;
+    padding: 10px 20px;
+    /* max-width: 280px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+
+}
+
+thead tr {
+    cursor: pointer;
+}
+
+th div {
+    display: flex;
+    flex-direction: row;
+    margin: 8px 8px;
+    box-sizing: border-box;
+    justify-content: center;
+
+}
+
+
+tfoot {
+    color: gray;
+}
+
+tfoot th {
+    font-weight: normal;
+}

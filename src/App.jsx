@@ -1,12 +1,14 @@
 import React from 'react'
-import OwnerTable from './components/OwnerTable/OwnerTable'
+
+import ReactTable from './components/reactTable/ReactTable'
+import TestApp from './components/main'
 
 function App() {
 
   return (
 
     <div className='asd' style={{ width: "100%", height: "100%" }}>
-      <OwnerTable />
+      <ReactTable />
 
     </div>
 
