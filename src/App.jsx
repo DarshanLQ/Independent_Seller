@@ -1,16 +1,11 @@
 import React from 'react'
-
-import ReactTable from './components/reactTable/ReactTable'
-import TestApp from './components/main'
+import PageContainer from './components/PageContainer/PageContainer'
 
 function App() {
 
   return (
 
-    <div className='asd' style={{ width: "100%", height: "100%" }}>
-      <ReactTable />
-
-    </div>
+    <PageContainer />
 
   )
 }

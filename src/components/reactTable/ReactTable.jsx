@@ -12,6 +12,7 @@ import {
     getFilteredRowModel
 } from '@tanstack/react-table'
 import InnerTable from '../innerTable/InnerTable'
+import Filter from '../Filter/Filter'
 
 const ReactTable = () => {
 
@@ -56,6 +57,35 @@ const ReactTable = () => {
         return false
     }
 
+    const globalFilter = React.useCallback((rows, ids, query) => {
+        const searchTerm = String(query);
+
+        return rows.filter((row) => {
+            const matches = ids.filter((id) => {
+                const rowValue = row.values[id];
+                let searchTermLower = searchTerm.toLowerCase();
+
+                if (searchTerm == '"') {
+                    // ignore first ' " ' handle it as no input
+                    return true
+                }
+                else if (searchTerm.startsWith('"') && searchTerm.endsWith('"')) {
+                    const exactSearchTerm = searchTerm.slice(1, -1);
+                    return String(rowValue) === exactSearchTerm;
+                }
+                else if (searchTerm.startsWith('"')) {
+                    // ignore until ending ' " ' has been entered
+                    searchTermLower = searchTerm.slice(1);
+                }
+
+                return rowValue !== undefined
+                    ? String(rowValue).toLowerCase().includes(searchTermLower.toLowerCase())
+                    : false;
+            });
+
+            return matches.length > 0;
+        });
+    }, []);
 
     const generateColumns = (data) => {
 
@@ -69,7 +99,10 @@ const ReactTable = () => {
 
 
                 columns.push(columnHelper.accessor(key, {
+                    filterFn: "equals",
                     id: key,
+                    enableColumnFilter: true,
+
                     cell: ({ row, getValue }) => (
                         <div style={{ cursor: 'pointer' }}>
 
@@ -86,7 +119,17 @@ const ReactTable = () => {
             else {
                 if (!key.includes("Url")) {
 
+                    function exactMatchFilter(rows, id, filterValue) {
+                        return rows.filter(row => {
+                            const rowValue = row.values[id]
+                            return (rowValue === filterValue || !filterValue)
+                        })
+                    }
+
                     columns.push(columnHelper.accessor(key, {
+                        // filterFn: exactMatchFilter,
+
+
                         cell: item => {
 
 
@@ -152,7 +195,7 @@ const ReactTable = () => {
         getFilteredRowModel: getFilteredRowModel(),
         // enableColumnResizing: true,
         // columnResizeMode: 'onChange',
-
+        // globalFilterFn: globalFilter,
         debugTable: true
     })
 
@@ -301,50 +344,9 @@ const ReactTable = () => {
 export default ReactTable
 
 
-function Filter({
-    column,
-    table
-}) {
-    const firstValue = table
-        .getPreFilteredRowModel()
-        .flatRows[0]?.getValue(column.id);
 
-    const columnFilterValue = column.getFilterValue();
 
-    return typeof firstValue === "number" ? (
-        <div className="flex space-x-2">
-            <input
-                type="number"
-                value={(columnFilterValue)?.[0] ?? ""}
-                onChange={(e) =>
-                    column.setFilterValue((old) => [
-                        e.target.value,
-                        old?.[1]
-                    ])
-                }
-                placeholder={`Min`}
-                className="w-24 border shadow rounded"
-            />
-            <input
-                type="number"
-                value={(columnFilterValue)?.[1] ?? ""}
-                onChange={(e) =>
-                    column.setFilterValue((old) => [
-                        old?.[0],
-                        e.target.value
-                    ])
-                }
-                placeholder={`Max`}
-                className="w-24 border shadow rounded"
-            />
-        </div>
-    ) : (
-        <input
-            type="text"
-            value={(columnFilterValue ?? "")}
-            onChange={(e) => column.setFilterValue(e.target.value)}
-            placeholder={`Search...`}
-            className="w-36 border shadow rounded"
-        />
-    );
-}
+// Textbox = Cert Number,
+// MultiSelect Dropdown = shape, LD spec, color, clarity, Cut, Polish, Sym, FLor, Shad, mily, lab
+// From - To =  carat wt, price, rank , count, sales, aging, inv count
+

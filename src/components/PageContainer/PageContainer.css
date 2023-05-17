@@ -1,0 +1,38 @@
+.topTable-container {
+    /* min-height: 50%; */
+    overflow-y: scroll;
+    /* overflow-x: hidden; */
+    height: 45vh;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+th {
+    min-width: 50px
+}
+
+table {
+    min-width: 100%;
+    table-layout: fixed;
+    overflow: scroll;
+}
+
+tr td {
+    white-space: nowrap;
+}
+
+.bottomTable-container {
+    margin-top: 10px;
+
+    /* min-height: 50%; */
+    overflow: scroll;
+    height: 45vh;
+
+}
+
+.pagination-controls {
+    margin: 10px 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
