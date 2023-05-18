@@ -12,7 +12,7 @@ import './TopTable.css'
 
 
 
-const TopTable = ({ setItem }) => {
+const TopTable = ({ setItem, passRef }) => {
     // const [columns, setColumns] = useState()
     const [itemData, setItemData] = useState()
     const [sorting, setSorting] = useState()
@@ -407,7 +407,7 @@ const TopTable = ({ setItem }) => {
     return (
         <>
             {
-                itemData ? <div style={{ overflow: "hidden", height: "100%" }}>
+                itemData ? <div style={{ overflow: "hidden", height: "100%", display: 'flex', flexDirection: "column" }}>
 
                     <div className='pagination-controls' >
                         <div>
@@ -457,7 +457,7 @@ const TopTable = ({ setItem }) => {
 
 
                     </div>
-                    <div style={{ overflow: "scroll", height: "100%" }}>
+                    <div style={{ overflow: "scroll", height: "100%" }} ref={passRef}>
                         <table >
                             <thead>
                                 {table.getHeaderGroups().map(headerGroup => (

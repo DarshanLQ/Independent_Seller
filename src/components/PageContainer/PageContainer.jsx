@@ -12,6 +12,7 @@ const PageContainer = () => {
 
     const scrollPos = () => {
 
+
         let x = bottomRef.current.scrollLeft
 
         let bWidth = bottomRef.current.scrollWidth - bottomRef.current.offsetWidth
@@ -21,6 +22,13 @@ const PageContainer = () => {
 
         topRef.current.scrollLeft = y
 
+        console.log({
+            bottomRef,
+            topRef,
+            x, bWidth, bScrollPercent, y
+        })
+
+
     }
 
     useEffect(() => {
@@ -29,13 +37,13 @@ const PageContainer = () => {
 
     return (
         <div style={{ width: "100%", height: "100%", boxSizing: "border-box" }}>
-            <div className='topTable-container' ref={topRef}>
-                <TopTable setItem={setSelectedItem} />
+            <div className='topTable-container' >
+                <TopTable setItem={setSelectedItem} passRef={topRef} />
             </div>
-            <div className='bottomTable-container' ref={bottomRef} onScroll={scrollPos}>
+            <div className='bottomTable-container'>
                 {
                     selectedItem ?
-                        <BottomTable rowData={selectedItem} /> :
+                        <BottomTable rowData={selectedItem} passRef={bottomRef} scroll={scrollPos} /> :
                         <div style={{ display: "flex", justifyContent: "center", alignContent: "center", }} >
                             <h2>Select a item to display similar diamonds</h2>
                         </div>

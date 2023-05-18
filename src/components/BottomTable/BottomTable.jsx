@@ -8,12 +8,11 @@ import {
     getExpandedRowModel,
     getFilteredRowModel
 } from '@tanstack/react-table'
-import { itemsData } from '../innerTable/data'
 
 
 
 
-const BottomTable = ({ parentRef, rowData }) => {
+const BottomTable = ({ rowData, passRef, scroll }) => {
     // const [columns, setColumns] = useState()
     const [itemData, setItemData] = useState()
     const [sorting, setSorting] = useState()
@@ -372,7 +371,7 @@ const BottomTable = ({ parentRef, rowData }) => {
     return (
         <>
             {
-                itemData ? <div style={{ overflow: "hidden", height: "100%" }}>
+                itemData ? <div style={{ overflow: "hidden", height: "100%", display: 'flex', flexDirection: "column" }}>
 
                     <div className='pagination-controls'>
                         <div>
@@ -422,7 +421,7 @@ const BottomTable = ({ parentRef, rowData }) => {
 
 
                     </div>
-                    <div style={{ height: "100%", width: "100%", overflow: "auto", boxSizing: "border-box" }}>
+                    <div style={{ height: "100%", width: "100%", overflow: "auto", boxSizing: "border-box" }} ref={passRef} onScroll={scroll}>
                         <table >
                             <thead>
                                 {table.getHeaderGroups().map(headerGroup => (
@@ -467,9 +466,7 @@ const BottomTable = ({ parentRef, rowData }) => {
                             <tbody>
                                 {table.getRowModel().rows.map((row, idx) => (
                                     <>
-                                        {
-                                            console.log({ row })
-                                        }
+
                                         <tr key={row.id} style={{
                                             cursor: 'pointer', backgroundColor: row.original["Cert Num"] == rowData["Cert Num"] ? "#d0d5d0" : "white",
 
