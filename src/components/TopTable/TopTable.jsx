@@ -502,7 +502,10 @@ const TopTable = ({ setItem, passRef }) => {
                                             setItem(row.original)
                                             setIntItem(row.original)
                                             console.log(row.original)
-                                        }} style={{ cursor: 'pointer', backgroundColor: row.original["LD ID"] === intItem["LD ID"] ? "#bde0ff" : "white" }}>
+                                        }} style={{
+                                            cursor: 'pointer', backgroundColor: intItem ?
+                                                row.original["LD ID"] === intItem["LD ID"] ? "#bde0ff" : "white" : "white"
+                                        }}>
                                             {row.getVisibleCells().map((cell) => (
                                                 <td key={cell.id}>
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
