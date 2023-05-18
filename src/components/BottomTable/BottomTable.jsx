@@ -425,7 +425,7 @@ const BottomTable = ({ rowData, passRef, scroll }) => {
                         <table >
                             <thead>
                                 {table.getHeaderGroups().map(headerGroup => (
-                                    <tr key={headerGroup.id + Math.random()} style={{ backgroundColor: "#8d8d8d" }}>
+                                    <tr key={headerGroup.id + Math.random()} style={{ backgroundColor: "#374ac4", color: "white" }}>
                                         {headerGroup.headers.map(header => {
 
                                             // TODO:  color set should be here 

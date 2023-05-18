@@ -16,6 +16,7 @@ const TopTable = ({ setItem, passRef }) => {
     // const [columns, setColumns] = useState()
     const [itemData, setItemData] = useState()
     const [sorting, setSorting] = useState()
+    const [intItem, setIntItem] = useState()
 
     const columnHelper = createColumnHelper()
 
@@ -461,7 +462,7 @@ const TopTable = ({ setItem, passRef }) => {
                         <table >
                             <thead>
                                 {table.getHeaderGroups().map(headerGroup => (
-                                    <tr key={headerGroup.id + Math.random()} style={{ backgroundColor: "#8d8d8d" }}>
+                                    <tr key={headerGroup.id + Math.random()} style={{ backgroundColor: "#374ac4", color: "white" }}>
                                         {headerGroup.headers.map(header => {
                                             return (
                                                 <th key={header.id} colSpan={header.colSpan}>
@@ -497,7 +498,11 @@ const TopTable = ({ setItem, passRef }) => {
                             <tbody>
                                 {table.getRowModel().rows.map((row, idx) => (
                                     <>
-                                        <tr key={row.id} onClick={() => setItem(row.original)} style={{ cursor: 'pointer', backgroundColor: idx % 2 == 0 ? "#d0d5d0" : "white" }}>
+                                        <tr key={row.id} onClick={() => {
+                                            setItem(row.original)
+                                            setIntItem(row.original)
+                                            console.log(row.original)
+                                        }} style={{ cursor: 'pointer', backgroundColor: row.original["LD ID"] === intItem["LD ID"] ? "#bde0ff" : "white" }}>
                                             {row.getVisibleCells().map((cell) => (
                                                 <td key={cell.id}>
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
