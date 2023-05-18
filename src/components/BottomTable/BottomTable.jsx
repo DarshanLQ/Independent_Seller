@@ -13,7 +13,7 @@ import { itemsData } from '../innerTable/data'
 
 
 
-const BottomTable = () => {
+const BottomTable = ({ parentRef, rowData }) => {
     // const [columns, setColumns] = useState()
     const [itemData, setItemData] = useState()
     const [sorting, setSorting] = useState()
@@ -318,16 +318,27 @@ const BottomTable = () => {
 
         (async () => {
             // call the fetch request for the table data here.
-            setItemData(itemsData.data)
+            setItemData(null)
+            let x = await fetch(`https://app.liquid.diamonds/get_rapnet_matching_items_for_item?item_id=${rowData["LD ID"]}`, {
+                headers: {
+                    "Authorization": "Bearer d18198f276acab345ab6f3302b5a37a4"
+                }
+            });
+
+            const { data } = await x.json()
+            console.log(data)
+
+
+            setItemData(data)
         })()
-    }, [])
+    }, [rowData])
 
     const table = useReactTable({
         data: itemData, columns, getCoreRowModel: getCoreRowModel(),
 
-        // state: {
-        //     sorting
-        // }, onSortingChange: setSorting, getSortedRowModel: getSortedRowModel(),
+        state: {
+            sorting
+        }, onSortingChange: setSorting, getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         // getExpandedRowModel: getExpandedRowModel(),
         // getFilteredRowModel: getFilteredRowModel(),
@@ -336,6 +347,10 @@ const BottomTable = () => {
         // globalFilterFn: globalFilter,
         debugTable: true
     })
+
+    useEffect(() => {
+        table.setPageSize(25)
+    }, [])
 
     const calucateCurrentItems = () => {
 
@@ -357,7 +372,7 @@ const BottomTable = () => {
     return (
         <>
             {
-                itemData ? <div>
+                itemData ? <div style={{ overflow: "hidden", height: "100%" }}>
 
                     <div className='pagination-controls'>
                         <div>
@@ -407,79 +422,88 @@ const BottomTable = () => {
 
 
                     </div>
-                    <table style={{ overflow: "scroll" }}>
-                        <thead>
-                            {table.getHeaderGroups().map(headerGroup => (
-                                <tr key={headerGroup.id + Math.random()} style={{ backgroundColor: "#8d8d8d" }}>
-                                    {headerGroup.headers.map(header => {
+                    <div style={{ height: "100%", width: "100%", overflow: "auto", boxSizing: "border-box" }}>
+                        <table >
+                            <thead>
+                                {table.getHeaderGroups().map(headerGroup => (
+                                    <tr key={headerGroup.id + Math.random()} style={{ backgroundColor: "#8d8d8d" }}>
+                                        {headerGroup.headers.map(header => {
 
-                                        // TODO:  color set should be here 
-                                        // write a function based on header.column.id and set with a switch statement
-                                        return (
-                                            <th key={header.id} colSpan={
-                                                header.colSpan
-                                            } >
-                                                {header.isPlaceholder ? null : (
-                                                    <>
-                                                        <div
-                                                            {...{
-                                                                className: header.column.getCanSort()
-                                                                    ? 'cursor-pointer select-none'
-                                                                    : '',
-                                                                onClick: header.column.getToggleSortingHandler(),
-                                                            }}
-                                                        >
-                                                            {flexRender(
-                                                                header.column.columnDef.header,
-                                                                header.getContext()
-                                                            )}
-                                                            {{
-                                                                asc: ' 🔼',
-                                                                desc: ' 🔽',
-                                                            }[header.column.getIsSorted()] ?? null}
+                                            // TODO:  color set should be here 
+                                            // write a function based on header.column.id and set with a switch statement
+                                            return (
+                                                <th key={header.id} colSpan={
+                                                    header.colSpan
+                                                } >
+                                                    {header.isPlaceholder ? null : (
+                                                        <>
+                                                            <div
+                                                                {...{
+                                                                    className: header.column.getCanSort()
+                                                                        ? 'cursor-pointer select-none'
+                                                                        : '',
+                                                                    onClick: header.column.getToggleSortingHandler(),
+                                                                }}
+                                                            >
+                                                                {flexRender(
+                                                                    header.column.columnDef.header,
+                                                                    header.getContext()
+                                                                )}
+                                                                {{
+                                                                    asc: ' 🔼',
+                                                                    desc: ' 🔽',
+                                                                }[header.column.getIsSorted()] ?? null}
 
 
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </th>
-                                        )
-                                    })}
-                                </tr>
-                            ))}
-                        </thead>
-                        <tbody>
-                            {table.getRowModel().rows.map((row, idx) => (
-                                <>
-                                    <tr key={row.id} style={{ cursor: 'pointer', backgroundColor: idx % 2 == 0 ? "#d0d5d0" : "white" }}>
-                                        {row.getVisibleCells().map((cell) => {
-                                            if (cell.column.id == "Stock No") {
-                                                <td key={cell.id} rowSpan={6} style={{ overflow: 'hidden' }}>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </th>
+                                            )
+                                        })}
+                                    </tr>
+                                ))}
+                            </thead>
+                            <tbody>
+                                {table.getRowModel().rows.map((row, idx) => (
+                                    <>
+                                        {
+                                            console.log({ row })
+                                        }
+                                        <tr key={row.id} style={{
+                                            cursor: 'pointer', backgroundColor: row.original["Cert Num"] == rowData["Cert Num"] ? "#d0d5d0" : "white",
+
+
+                                        }}>
+                                            {row.getVisibleCells().map((cell) => {
+
+
+
+                                                return <td key={cell.id}>
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                 </td>
                                             }
+                                            )}
+                                        </tr>
+                                        {
+                                            row.getIsExpanded() && (
+                                                <tr>
 
-                                            return <td key={cell.id}>
-                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                            </td>
+                                                    <td colSpan={row.getVisibleCells().length}>
+                                                        {<InnerTable parentRef={parentDivRef} data={row.original} />}
+                                                    </td>
+                                                </tr>
+                                            )
                                         }
-                                        )}
-                                    </tr>
-                                    {
-                                        row.getIsExpanded() && (
-                                            <tr>
+                                    </>
+                                ))}
+                            </tbody>
 
-                                                <td colSpan={row.getVisibleCells().length}>
-                                                    {<InnerTable parentRef={parentDivRef} data={row.original} />}
-                                                </td>
-                                            </tr>
-                                        )
-                                    }
-                                </>
-                            ))}
-                        </tbody>
-
-                    </table></div> : null
+                        </table>
+                    </div>
+                </div> : <div>
+                    Loading
+                </div>
             }
         </>
     )

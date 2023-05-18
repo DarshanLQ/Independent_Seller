@@ -8,7 +8,6 @@ import {
     getExpandedRowModel,
     getFilteredRowModel
 } from '@tanstack/react-table'
-import { itemsData } from '../reactTable/data'
 import './TopTable.css'
 
 
@@ -353,17 +352,28 @@ const TopTable = ({ setItem }) => {
     useEffect(() => {
 
         (async () => {
-            // call the fetch request for the table data here.
-            setItemData(itemsData.data)
+            // call  the fetch request for the table data here.
+
+            let id = 5
+
+            let x = await fetch(`https://app.liquid.diamonds/get_pricing_report_items?seller_account_id=${id}`, {
+                headers: {
+                    "Authorization": "Bearer d18198f276acab345ab6f3302b5a37a4"
+                }
+            });
+
+            const { data } = await x.json()
+            setItemData(data.pricing_report_items)
         })()
     }, [])
 
     const table = useReactTable({
         data: itemData, columns, getCoreRowModel: getCoreRowModel(),
 
-        // state: {
-        //     sorting
-        // }, onSortingChange: setSorting, getSortedRowModel: getSortedRowModel(),
+        state: {
+            sorting,
+
+        }, onSortingChange: setSorting, getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         // getExpandedRowModel: getExpandedRowModel(),
         // getFilteredRowModel: getFilteredRowModel(),
@@ -372,6 +382,10 @@ const TopTable = ({ setItem }) => {
         // globalFilterFn: globalFilter,
         debugTable: true
     })
+
+    useEffect(() => {
+        table.setPageSize("25")
+    }, [])
 
     const calucateCurrentItems = () => {
 
@@ -393,9 +407,9 @@ const TopTable = ({ setItem }) => {
     return (
         <>
             {
-                itemData ? <div>
+                itemData ? <div style={{ overflow: "hidden", height: "100%" }}>
 
-                    <div className='pagination-controls'>
+                    <div className='pagination-controls' >
                         <div>
                             {
                                 calucateCurrentItems()
@@ -443,67 +457,60 @@ const TopTable = ({ setItem }) => {
 
 
                     </div>
-                    <table style={{ overflow: "scroll" }}>
-                        <thead>
-                            {table.getHeaderGroups().map(headerGroup => (
-                                <tr key={headerGroup.id + Math.random()} style={{ backgroundColor: "#8d8d8d" }}>
-                                    {headerGroup.headers.map(header => {
-                                        return (
-                                            <th key={header.id} colSpan={header.colSpan}>
-                                                {header.isPlaceholder ? null : (
-                                                    <>
-                                                        <div
-                                                            {...{
-                                                                className: header.column.getCanSort()
-                                                                    ? 'cursor-pointer select-none'
-                                                                    : '',
-                                                                onClick: header.column.getToggleSortingHandler(),
-                                                            }}
-                                                        >
-                                                            {flexRender(
-                                                                header.column.columnDef.header,
-                                                                header.getContext()
-                                                            )}
-                                                            {{
-                                                                asc: ' 🔼',
-                                                                desc: ' 🔽',
-                                                            }[header.column.getIsSorted()] ?? null}
+                    <div style={{ overflow: "scroll", height: "100%" }}>
+                        <table >
+                            <thead>
+                                {table.getHeaderGroups().map(headerGroup => (
+                                    <tr key={headerGroup.id + Math.random()} style={{ backgroundColor: "#8d8d8d" }}>
+                                        {headerGroup.headers.map(header => {
+                                            return (
+                                                <th key={header.id} colSpan={header.colSpan}>
+                                                    {header.isPlaceholder ? null : (
+                                                        <>
+                                                            <div
+                                                                {...{
+                                                                    className: header.column.getCanSort()
+                                                                        ? 'cursor-pointer select-none'
+                                                                        : '',
+                                                                    onClick: header.column.getToggleSortingHandler(),
+                                                                }}
+                                                            >
+                                                                {flexRender(
+                                                                    header.column.columnDef.header,
+                                                                    header.getContext()
+                                                                )}
+                                                                {{
+                                                                    asc: ' 🔼',
+                                                                    desc: ' 🔽',
+                                                                }[header.column.getIsSorted()] ?? null}
 
 
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </th>
-                                        )
-                                    })}
-                                </tr>
-                            ))}
-                        </thead>
-                        <tbody>
-                            {table.getRowModel().rows.map((row, idx) => (
-                                <>
-                                    <tr key={row.id} onClick={() => setItem(row.original)} style={{ cursor: 'pointer', backgroundColor: idx % 2 == 0 ? "#d0d5d0" : "white" }}>
-                                        {row.getVisibleCells().map((cell) => (
-                                            <td key={cell.id}>
-                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                            </td>
-                                        ))}
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </th>
+                                            )
+                                        })}
                                     </tr>
-                                    {
-                                        row.getIsExpanded() && (
-                                            <tr>
-
-                                                <td colSpan={row.getVisibleCells().length}>
-                                                    {<InnerTable parentRef={parentDivRef} data={row.original} />}
+                                ))}
+                            </thead>
+                            <tbody>
+                                {table.getRowModel().rows.map((row, idx) => (
+                                    <>
+                                        <tr key={row.id} onClick={() => setItem(row.original)} style={{ cursor: 'pointer', backgroundColor: idx % 2 == 0 ? "#d0d5d0" : "white" }}>
+                                            {row.getVisibleCells().map((cell) => (
+                                                <td key={cell.id}>
+                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                 </td>
-                                            </tr>
-                                        )
-                                    }
-                                </>
-                            ))}
-                        </tbody>
+                                            ))}
+                                        </tr>
+                                    </>
+                                ))}
+                            </tbody>
 
-                    </table></div> : null
+                        </table>
+                    </div>
+                </div> : null
             }
         </>
     )

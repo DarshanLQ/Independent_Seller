@@ -35,7 +35,7 @@ const PageContainer = () => {
             <div className='bottomTable-container' ref={bottomRef} onScroll={scrollPos}>
                 {
                     selectedItem ?
-                        <BottomTable /> :
+                        <BottomTable rowData={selectedItem} /> :
                         <div style={{ display: "flex", justifyContent: "center", alignContent: "center", }} >
                             <h2>Select a item to display similar diamonds</h2>
                         </div>

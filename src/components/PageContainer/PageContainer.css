@@ -1,7 +1,7 @@
 .topTable-container {
     /* min-height: 50%; */
-    overflow-y: scroll;
-    /* overflow-x: hidden; */
+    /* overflow-y: scroll; */
+    /* overflow: hidden; */
     height: 45vh;
     width: 100%;
     margin-bottom: 10px;
@@ -23,10 +23,7 @@ tr td {
 
 .bottomTable-container {
     margin-top: 10px;
-
-    /* min-height: 50%; */
-    overflow: scroll;
-    height: 45vh;
+    height: 50vh;
 
 }
 

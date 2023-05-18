@@ -114,6 +114,15 @@ const InnerTable = ({ parentRef, data }) => {
             // call the fetch request for the table data here.
 
 
+            let x = await fetch(`https://app.liquid.diamonds/get_rapnet_matching_items_for_item?item_id=${data["LD ID"]}`, {
+                headers: {
+                    "Authorization": "Bearer d18198f276acab345ab6f3302b5a37a4"
+                }
+            });
+
+            const { data } = await x.json()
+            console.log(data)
+
             generateColumns(itemsData.data)
             setTimeout(() => setItemData(itemsData.data), 2000)
         })()

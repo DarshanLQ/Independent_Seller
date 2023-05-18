@@ -1,6 +1,8 @@
 table {
     border-collapse: collapse;
     border: 0.5px solid black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 11px;
 }
 
 tr {
